@@ -3,8 +3,6 @@ let shoppingCart = document.getElementById('shopping-cart')
 
 let basket = JSON.parse(localStorage.getItem("data")) || [];
 
-// console.log(basket);
-
 let calculation = () => {
     let cartIcon = document.getElementById("cartAmount");
 
@@ -17,10 +15,8 @@ calculation();
 let generateCartItems = () => {
     if(basket.length !==0) {
         
-        // this function will target all the items one by one and then insert any items in the cart into the cart page 
         return (shoppingCart.innerHTML = basket.map((x) => {
             
-            // I have used variables to deconstruct the x, which are equal to the items selected by the user. I want to pluck the ID and the Item and form a new x that just contains this information.
             let { id, item } = x;
             
             // I have created a search function to match the ids of the items in my basket to the items in my data.js. y.id is coming from the database, id is coming from the basket.  .find will match the items. if nothing matches then nothing will be returned hence the empty array
@@ -52,7 +48,6 @@ let generateCartItems = () => {
             `;
         }).join(''));
     } else {
-        // console.log('basket is EMPTY')
 
         shoppingCart.innerHTML = ``
         label.innerHTML = `
@@ -66,7 +61,6 @@ let generateCartItems = () => {
 
 generateCartItems();
 
-// the id has been passsed so that JS knows which card to remove
 let increment = (id) => {
     let selectedItem = id;
 
@@ -82,15 +76,11 @@ let increment = (id) => {
         search.item += 1;
     }
 
-    // console.log(basket)
-
-    // i have invoked this say that the quantity * itemPrice will be displayed in the shopping cart
+    // i have invoked this function to display the quantity * itemPrice will be displayed in the shopping cart
     generateCartItems();
     
-    // i have invoked the update function in the increment and decrement functions so that it can respond to the cartAmount changes made by the user
     update(selectedItem.id);
 
-    // SetItem puts the data into the local storage
     localStorage.setItem("data", JSON.stringify(basket));
 };
 
@@ -108,10 +98,10 @@ let decrement = (id) => {
         search.item -= 1;
     }
 
-     // console.log(basket)
+
      update(selectedItem.id);
     
-    // .filter targets all the objects in the basket array one by one.  x.item !==0 selects all the objects that aren't equal to zero.  The .filter will remove the ones that are equal to zero
+    // .filter targets all the objects in the basket array one by one.  The .filter will remove the ones that are equal to zero
     basket = basket.filter((x) => x.item !== 0);
 
     // i am calling this function to remove items from the cart that have a quanitity of zero
@@ -132,7 +122,6 @@ let update = (id) => {
 
 let removeItem = (id) => {
     let selectedItem = id;
-    // console.log(selectedItem.id);
 
     // inside x (the items in the cart) we are targeting the id.  The .filter initiates a new array filled with elements that pass my test
     basket = basket.filter((x) => x.id !== selectedItem.id);
@@ -151,7 +140,6 @@ let totalAmount = () => {
     if(basket.legth !==0) {
         let amount = basket.map((x) => {
             
-            // i am deconstructing x as i just want x to refer to the items id
             let {item, id} = x;
             
             // this is using the id to match against the database
@@ -159,14 +147,12 @@ let totalAmount = () => {
 
             return item * search.price;
         }).reduce((x, y) => x + y, 0);
-        // console.log(amount)
 
         label.innerHTML = `
         <h2>Total Bill : £${amount}</h2>
         <button class="checkout">Checkout</button>
         <button onclick="clearCart()" class="clear-cart">Clear cart</button>
         `
-
     } else return
 };
 
@@ -179,7 +165,6 @@ let clearCart = () => {
 
     localStorage.setItem("data", JSON.stringify(basket));
 
-    // this function is being invoked using an onclick event on the clear cart button
 }
 
 totalAmount();
